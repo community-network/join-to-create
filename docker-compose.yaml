@@ -20,9 +20,9 @@ services:
       retries: 5
       start_period: "10s"
     networks:
-      - voice-squads
-  voice-squads-bot:
-    image: ghcr.io/community-network/voice-squads/voice-squads-bot:latest
+      - join-to-create
+  join-to-create-bot:
+    image: ghcr.io/community-network/join-to-create/join-to-create-bot:latest
     restart: always
     depends_on:
       - db
@@ -31,14 +31,13 @@ services:
       - POSTGRES_USER=${DB_USERNAME}
       - POSTGRES_PASSWORD=${DB_PASSWORD}
       - POSTGRES_DB=${DB_NAME}
-      - DEFAULT_CHANNEL_NAMES=${DEFAULT_CHANNEL_NAMES}
       - DB_HOST=db
     networks:
-      - voice-squads
+      - join-to-create
 
 volumes:
   postgress_db:
 
 networks:
-  voice-squads:
+  join-to-create:
     driver: bridge
