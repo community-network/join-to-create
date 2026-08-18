@@ -28,7 +28,7 @@ class Admin(commands.Cog):
         name="create_channels", description="Change the create channels", parent=group
     )
 
-    async def channel_name_autocomplete_parents(
+    async def channel_name_autocomplete_existing(
         self,
         interaction: discord.Interaction,
         current: str,
@@ -118,7 +118,7 @@ class Admin(commands.Cog):
     @app_commands.default_permissions(administrator=True)
     @app_commands.checks.has_permissions(administrator=True)
     async def list_tracked_channels(self, interaction: discord.Interaction) -> None:
-        """List parent channels"""
+        """List create channels"""
         await interaction.response.defer()
         if interaction.guild_id is None:
             return  # is already set to guild_only
@@ -130,24 +130,24 @@ class Admin(commands.Cog):
 
             if len(channel_ids) <= 0:
                 await interaction.followup.send(
-                    "No parent channels are tracked", ephemeral=True
+                    "No create channels are tracked", ephemeral=True
                 )
                 return
 
             embed = discord.Embed(
-                title="Current parent channels:", description=description
+                title="Current create channels:", description=description
             )
             await interaction.followup.send(embed=embed, ephemeral=True)
 
-    @create_channel_group.command(name="remove", description="Remove a parent channel")
+    @create_channel_group.command(name="remove", description="Remove a create channel")
     @app_commands.guild_only()
-    @app_commands.autocomplete(channel=channel_name_autocomplete_parents)
+    @app_commands.autocomplete(channel=channel_name_autocomplete_existing)
     @app_commands.default_permissions(administrator=True)
     @app_commands.checks.has_permissions(administrator=True)
     async def remove_tracked_channel(
         self, interaction: discord.Interaction, channel: str
     ) -> None:
-        """Remove a parent channel"""
+        """Remove a create channel"""
         await interaction.response.defer()
         if interaction.guild_id is None:
             return  # is already set to guild_only
@@ -159,12 +159,12 @@ class Admin(commands.Cog):
                 await remove_create_channel(session, interaction.guild_id, int(channel))
 
                 await interaction.followup.send(
-                    "Removed the parent channel", ephemeral=True
+                    "Removed the create channel", ephemeral=True
                 )
                 return
 
             await interaction.followup.send(
-                "Parent channel wasn't tracked", ephemeral=True
+                "Create channel wasn't tracked", ephemeral=True
             )
 
 
