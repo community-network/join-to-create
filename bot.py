@@ -12,12 +12,11 @@ from config import load_config
 from database.connection import DatabaseSingleton
 from logger import setup_logger
 from utils.create_channels import (
-    add_create_channel,
     get_create_channel,
-    get_create_channels,
 )
 from utils.server_settings import add_guild, has_guild
 from utils.voice_channels import (
+    add_voice_channel,
     get_voice_channel,
     remove_voice_channel,
 )
@@ -81,7 +80,8 @@ async def on_voice_channel_join(
     new_channel = await category.create_voice_channel(
         f"{member.display_name}'s channel", position=after.channel.position
     )
-    await add_create_channel(session, member.guild.id, new_channel.id)
+    await add_voice_channel(session, member.guild.id, new_channel.id)
+    await member.move_to(new_channel, reason="Moved user to generated channel")
 
 
 async def on_voice_channel_leave(

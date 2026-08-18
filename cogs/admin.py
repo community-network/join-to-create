@@ -58,7 +58,7 @@ class Admin(commands.Cog):
             return [
                 app_commands.Choice(name=channel.name, value=str(channel.id))
                 for channel in interaction.guild.voice_channels
-                if channel.id in voice_channel_ids
+                if channel.id not in voice_channel_ids
                 and channel.name.lower().startswith(current.lower())
             ][:25]
 
